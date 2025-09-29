@@ -2,13 +2,6 @@
 ---
 > Explore o maior acervo de heróis e histórias da Marvel, alimentado pela API oficial.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
 ## 🌟 Sobre o MarvelVerse Hub
 
 Este projeto nasceu da minha paixão pelo **Universo Marvel** (especialmente o trabalho do **Marvel Studios**!) e o desejo de aprimorar minhas habilidades em **programação**. O objetivo é criar um portal interativo e responsivo onde fãs possam:
@@ -26,9 +19,7 @@ Este projeto nasceu da minha paixão pelo **Universo Marvel** (especialmente o t
 * **Galeria de Quadrinhos:** Explore a lista de *comics* associados a cada personagem.
 * **Design Responsivo:** Acesse o *Hub* de qualquer dispositivo (Desktop, Tablet ou Mobile).
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
 ## 🛠️ Tecnologias Utilizadas
 
