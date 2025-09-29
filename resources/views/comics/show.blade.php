@@ -59,4 +59,37 @@
             &larr; Voltar
         </a>
     </div>
+
+ {{-- SEÇÃO NOVA: PERSONAGENS EM DESTAQUE --}}
+            @if ($comic['characters']['available'] > 0)
+                <div class="mt-12 border-t border-gray-700 pt-8">
+                    <h2 class="text-3xl font-bold text-white mb-6">Personagens em Destaque</h2>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                        @foreach ($comic['characters']['items'] as $character)
+                            @php
+                                // Extrai o ID do personagem da URL (resourceURI)
+                                $urlParts = explode('/', $character['resourceURI']);
+                                $characterId = end($urlParts);
+                            @endphp
+                            <a href="{{ route('personagens.show', $characterId) }}" class="group text-center">
+                                {{-- Este componente de imagem é um placeholder. O ideal é fazer uma chamada
+                                     para pegar a imagem de cada personagem, mas para começar,
+                                     vamos exibir o nome. --}}
+
+                                <div class="bg-gray-800 p-3 rounded-lg aspect-square flex items-center justify-center group-hover:bg-red-600 transition-colors duration-200">
+                                    {{-- Como não temos a imagem aqui, vamos exibir o nome --}}
+                                    <span class="text-white font-semibold">{{ $character['name'] }}</span>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+        </div>
+    </div>
+
+
+
 @endsection

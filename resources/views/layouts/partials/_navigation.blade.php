@@ -1,7 +1,8 @@
-{{-- resources/views/layouts/partials/_navigation.blade.php --}}
 @php
     $personagensIsActive = request()->routeIs('personagens.*');
     $comicsIsActive = request()->routeIs('comics.*');
+    $seriesIsActive = request()->routeIs('series.*'); // Adicionado
+     $eventsIsActive = request()->routeIs('events.*');
 @endphp
 
 <div class="border-b-2 border-transparent">
@@ -16,5 +17,19 @@
                   {{ $comicsIsActive ? 'border-red-500 text-white' : 'border-transparent text-gray-400 hover:border-red-500 hover:text-gray-200' }}">
             Quadrinhos
         </a>
+        
+        {{-- Link de Séries Adaptado --}}
+        <a href="{{ route('series.index') }}"
+           class="py-2 px-1 border-b-2 font-medium text-lg transition-all duration-300
+                  {{ $seriesIsActive ? 'border-red-500 text-white' : 'border-transparent text-gray-400 hover:border-red-500 hover:text-gray-200' }}">
+            Séries
+        </a>
+
+        <a href="{{ route('events.timeline') }}"
+        class="py-2 px-1 border-b-2 font-medium text-lg transition-all duration-300
+          {{ $eventsIsActive ? 'border-red-500 text-white' : 'border-transparent text-gray-400 hover:border-red-500 hover:text-gray-200' }}">
+            Eventos
+        </a>
+
     </nav>
 </div>

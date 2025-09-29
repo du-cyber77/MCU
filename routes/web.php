@@ -4,6 +4,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PersonagemController;
 use App\Http\Controllers\ComicController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SerieController;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +28,8 @@ Route::get('/personagens/{id}', [PersonagemController::class, 'show'])->name('pe
 // Rotas de Quadrinhos
 Route::get('/quadrinhos', [ComicController::class, 'index'])->name('comics.index');
 Route::get('/quadrinhos/{id}', [ComicController::class, 'show'])->name('comics.show');
+
+Route::get('/series', [SerieController::class, 'index'])->name('series.index');
+Route::get('/series/{id}', [SerieController::class, 'show'])->name('series.show');
+
+Route::get('/eventos/linha-do-tempo', [EventController::class, 'timeline'])->name('events.timeline');

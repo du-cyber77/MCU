@@ -1,4 +1,3 @@
-{{-- resources/views/personagens/show.blade.php --}}
 @extends('layouts.app')
 
 @section('title', $personagem['name'])
@@ -31,27 +30,20 @@
     </div>
     {{-- FIM DA HERO SECTION --}}
 
-    {{-- Lista de Quadrinhos --}}
-    <div class="bg-gray-800 rounded-lg shadow-lg p-8">
-        <h2 class="text-3xl font-bold mb-6 tracking-wide">Aparições em Quadrinhos ({{ $personagem['comics']['available'] }})</h2>
-        <div class="h-64 overflow-y-auto pr-4">
-            <ul class="space-y-3 text-gray-300">
-                @forelse($personagem['comics']['items'] as $comic)
-                    @php
-                        $comicId = basename($comic['resourceURI']);
-                    @endphp
-                    <li class="flex items-center space-x-3">
-                        <span class="text-red-500">&rarr;</span>
-                        <a href="{{ route('comics.show', $comicId) }}" class="text-lg hover:text-red-500 hover:underline transition-colors">
-                            {{ $comic['name'] }}
-                        </a>
-                    </li>
-                @empty
-                    <li>Nenhuma aparição em quadrinhos listada.</li>
-                @endforelse
-            </ul>
+    {{-- INÍCIO DA NOVA SEÇÃO "APARIÇÕES EM DESTAQUE" --}}
+    @if (!empty($comics))
+        <div class="bg-gray-800 rounded-lg shadow-lg p-8">
+            <h2 class="text-3xl font-bold text-white mb-6 tracking-wide">Aparições em Destaque</h2>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                @foreach ($comics as $comic)
+                    {{-- Reutilizamos o componente que já existe para os cards de quadrinhos --}}
+                    <x-comic-card :comic="$comic" />
+                @endforeach
+            </div>
         </div>
-    </div>
+    @endif
+    {{-- FIM DA NOVA SEÇÃO --}}
 
     {{-- Botão Voltar --}}
     <div class="mt-10">

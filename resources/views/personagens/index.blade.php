@@ -6,53 +6,55 @@
 @section('content')
     <h1 class="text-4xl font-bold mb-8 text-center">Personagens da Marvel</h1>
 
-    {{-- Formulário de Busca --}}
-    <div class="mb-10">
-        <form action="{{ route('personagens.index') }}" method="GET" class="max-w-xl mx-auto">
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <input 
-                    type="text" 
-                    name="busca" 
-                    placeholder="Buscar por herói (ex: Hulk)" 
-                    class="block w-full p-4 pl-10 text-lg bg-gray-700 border border-transparent rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
-                    value="{{ request('busca') }}"
-                >
-            </div>
-        </form>
-    </div>
-
-    {{-- Container para os esqueletos (visível por padrão) --}}
-    <div id="skeleton-loader" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        @for ($i = 0; $i < 12; $i++)
-            <x-card-skeleton />
-        @endfor
-    </div>
-
-    {{-- Container para o conteúdo real (escondido por padrão) --}}
-    <div id="actual-content" style="display: none;">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            @forelse ($personagens as $personagem)
-                <x-personagem-card :personagem="$personagem" />
-            @empty
-                <p class="text-center col-span-full text-lg">
-                    @if (request('busca'))
-                        Nenhum personagem encontrado com o termo "{{ request('busca') }}".
-                    @else
-                        Nenhum personagem encontrado.
-                    @endif
-                </p>
-            @endforelse
-        </div>
+    {{-- Formulário de Filtros e Busca --}}
+<div class="mb-8 bg-gray-800 p-4 rounded-lg flex flex-col md:flex-row items-center gap-4">
     
-        <div class="mt-10">
-            {{ $personagens->links('vendor.pagination.tailwind') }}
+    {{-- Formulário de Busca --}}
+    <form action="{{ route('personagens.index') }}" method="GET" class="flex-grow w-full md:w-auto">
+        <div class="flex">
+            <input
+                type="text"
+                name="busca" {{-- Alterado de 'search' para 'busca' --}}
+                placeholder="Buscar por nome..."
+                class="w-full bg-gray-700 text-white rounded-l-md p-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                value="{{ request('busca') }}"
+            >
+            {{-- Mantém o filtro de ordenação ao buscar --}}
+            <input type="hidden" name="orderBy" value="{{ $orderBy }}">
+            
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-r-md">
+                Buscar
+            </button>
         </div>
-    </div>
+    </form>
+
+    {{-- Formulário de Ordenação --}}
+    <form action="{{ route('personagens.index') }}" method="GET" class="w-full md:w-auto">
+         <div class="flex items-center">
+             <label for="orderBy" class="text-white mr-2">Ordenar por:</label>
+             <select name="orderBy" id="orderBy" class="bg-gray-700 text-white rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-red-500" onchange="this.form.submit()">
+                 <option value="name" @if($orderBy == 'name') selected @endif>Nome (A-Z)</option>
+                 <option value="-name" @if($orderBy == '-name') selected @endif>Nome (Z-A)</option>
+                 <option value="-modified" @if($orderBy == '-modified') selected @endif>Mais Recentes</option>
+                 <option value="modified" @if($orderBy == 'modified') selected @endif>Mais Antigos</option>
+             </select>
+             {{-- Mantém o termo de busca ao ordenar --}}
+             <input type="hidden" name="busca" value="{{ request('busca') }}">
+         </div>
+    </form>
+</div>
+
+{{-- Grid de Personagens --}}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    @foreach ($personagens as $personagem)
+        <x-personagem-card :personagem="$personagem" />
+    @endforeach
+</div>
+
+{{-- Paginação do Laravel --}}
+<div class="mt-12">
+    {{ $personagens->links() }}
+</div>
 
     <script>
         window.addEventListener('load', function () {
