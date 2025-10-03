@@ -22,9 +22,11 @@ Este projeto nasceu da minha paixão pelo **Universo Marvel** (especialmente o t
 
 
 ## 🛠️ Tecnologias Utilizadas
+Frontend: 🖼️ Laravel Blade com Vite
 
-* **Frontend:** [Seu framework/biblioteca: Ex: React, Vue, Svelte, etc.]
-* **Linguagem:** [Sua linguagem: Ex: JavaScript, TypeScript, Python, etc.]
-* **Estilização:** [Ex: CSS Modules, Styled Components, Tailwind CSS]
-* **API:** Marvel Developer API
-* **Outras:** [Ex: Context API/Redux para gerenciamento de estado, Git]
+Linguagem: 💻 PHP e JavaScript
+
+Estilização: 🎨 Tailwind CSS
+
+API: 🌐 Marvel Developer API
+
