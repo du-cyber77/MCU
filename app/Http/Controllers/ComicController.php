@@ -18,11 +18,28 @@ class ComicController extends Controller
     public function index(Request $request)
     {
         $limit = 20;
+        $allowedOrderBy = ['title', '-title', 'onsaleDate', '-onsaleDate'];
+
         $tituloBusca = $request->input('busca');
-        $paginaAtual = $request->input('page', 1);
+        if (is_string($tituloBusca)) {
+            $tituloBusca = trim($tituloBusca);
+            $tituloBusca = $tituloBusca !== '' ? mb_substr($tituloBusca, 0, 50) : null;
+        } else {
+            $tituloBusca = null;
+        }
+
+        $orderBy = $request->input('orderBy', 'title');
+        if (!in_array($orderBy, $allowedOrderBy, true)) {
+            $orderBy = 'title';
+        }
+
+        $paginaAtual = (int) $request->input('page', 1);
+        if ($paginaAtual < 1) {
+            $paginaAtual = 1;
+        }
         $offset = ($paginaAtual - 1) * $limit;
 
-        $dados = $this->marvelService->getComics($limit, $tituloBusca, $offset);
+        $dados = $this->marvelService->getComics($limit, $tituloBusca, $offset, $orderBy);
 
         $comicsPaginados = new LengthAwarePaginator(
             $dados['comics'],
@@ -32,11 +49,16 @@ class ComicController extends Controller
             ['path' => route('comics.index')]
         );
 
-        if ($tituloBusca) {
-            $comicsPaginados->appends(['busca' => $tituloBusca]);
-        }
+        $comicsPaginados->appends([
+            'busca' => $tituloBusca,
+            'orderBy' => $orderBy,
+            'page' => $paginaAtual,
+        ]);
 
-        return view('comics.index', ['comics' => $comicsPaginados]);
+        return view('comics.index', [
+            'comics' => $comicsPaginados,
+            'orderBy' => $orderBy,
+        ]);
     }
 
     public function show(string $id)
