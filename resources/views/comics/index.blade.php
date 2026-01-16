@@ -8,7 +8,7 @@
 
     {{-- Formulário de Busca --}}
     <div class="mb-10">
-        <form action="{{ route('comics.index') }}" method="GET" class="max-w-xl mx-auto">
+        <form action="{{ route('comics.index') }}" method="GET" class="max-w-xl mx-auto space-y-4">
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -22,6 +22,27 @@
                     class="block w-full p-4 pl-10 text-lg bg-gray-700 border border-transparent rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
                     value="{{ request('busca') }}"
                 >
+            </div>
+            <div>
+                <label for="orderBy" class="block text-sm font-medium text-gray-300 mb-2">Ordenar por</label>
+                <select
+                    id="orderBy"
+                    name="orderBy"
+                    class="block w-full p-3 bg-gray-700 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                >
+                    <option value="title" @selected(($orderBy ?? 'title') === 'title')>Título (A-Z)</option>
+                    <option value="-title" @selected(($orderBy ?? 'title') === '-title')>Título (Z-A)</option>
+                    <option value="onsaleDate" @selected(($orderBy ?? 'title') === 'onsaleDate')>Mais antigos</option>
+                    <option value="-onsaleDate" @selected(($orderBy ?? 'title') === '-onsaleDate')>Mais recentes</option>
+                </select>
+            </div>
+            <div class="flex justify-center">
+                <button
+                    type="submit"
+                    class="px-6 py-3 bg-red-600 text-white rounded-full font-semibold hover:bg-red-700 transition-colors"
+                >
+                    Aplicar filtros
+                </button>
             </div>
         </form>
     </div>

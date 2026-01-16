@@ -18,36 +18,56 @@ class PersonagemController extends Controller
     /**
      * Exibe uma lista de personagens.
      * ESTE MÉTODO PRECISA EXISTIR!
-     */
- public function index(Request $request)
-{
-    $limit = 24;
-    $termoBusca = $request->input('busca');
-    $orderBy = $request->input('orderBy', 'name'); // 1. Pega o parâmetro de ordenação
+ */
+    public function index(Request $request)
+    {
+        $allowedOrderBy = ['name', '-name', 'modified', '-modified'];
+        $limit = 24;
 
-    $paginaAtual = $request->input('page', 1);
-    $offset = ($paginaAtual - 1) * $limit;
+        $termoBusca = $request->input('busca');
+        if (is_string($termoBusca)) {
+            $termoBusca = trim($termoBusca);
+            $termoBusca = $termoBusca !== '' ? mb_substr($termoBusca, 0, 50) : null;
+        } else {
+            $termoBusca = null;
+        }
 
-    // 2. Passa o $orderBy para o seu service
-    $dados = $this->marvelService->getPersonagens($limit, $termoBusca, $offset, $orderBy);
+        $orderBy = $request->input('orderBy', 'name');
+        if (!in_array($orderBy, $allowedOrderBy, true)) {
+            $orderBy = 'name';
+        }
 
-    $personagensPaginados = new LengthAwarePaginator(
-        $dados['personagens'],
-        $dados['total'],
-        $limit,
-        $paginaAtual,
-        ['path' => route('personagens.index')]
-    );
+        $paginaAtual = (int) $request->input('page', 1);
+        if ($paginaAtual < 1) {
+            $paginaAtual = 1;
+        }
 
-    // 3. Adiciona TODOS os parâmetros de query atuais aos links da paginação
-    $personagensPaginados->appends($request->all());
-    
-    // 4. Retorna a view, passando o paginador e o orderBy para o seletor
-    return view('personagens.index', [
-        'personagens' => $personagensPaginados,
-        'orderBy' => $orderBy // Adicionado para manter o seletor selecionado
-    ]);
-}
+        $offset = ($paginaAtual - 1) * $limit;
+
+        // 2. Passa o $orderBy para o seu service
+        $dados = $this->marvelService->getPersonagens($limit, $termoBusca, $offset, $orderBy);
+
+        $personagensPaginados = new LengthAwarePaginator(
+            $dados['personagens'],
+            $dados['total'],
+            $limit,
+            $paginaAtual,
+            ['path' => route('personagens.index')]
+        );
+
+        // 3. Adiciona TODOS os parâmetros de query atuais aos links da paginação
+        $personagensPaginados->appends([
+            'busca' => $termoBusca,
+            'orderBy' => $orderBy,
+            'page' => $paginaAtual,
+        ]);
+
+        // 4. Retorna a view, passando o paginador e o orderBy para o seletor
+        return view('personagens.index', [
+            'personagens' => $personagensPaginados,
+            'orderBy' => $orderBy // Adicionado para manter o seletor selecionado
+        ]);
+    }
     /**
      * Exibe os detalhes de um personagem específico.
      */
